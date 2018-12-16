@@ -2,53 +2,86 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="acmc.heatcontrol.MainActivity"
-    android:id="@+id/constraintParent">
+    tools:context="acmc.heatcontrol.MainActivity">
 
     <TextView
+        android:layout_margin="@dimen/standardMargin"
+        android:id="@+id/nombreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Device name"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/nombreTextView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/enabledState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="State"
-        app:layout_constraintBottom_toBottomOf="@id/nombreTextView"
+        android:text="Enabled state"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/nombreTextView"
+        android:layout_marginLeft="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tempSeleccionada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temperature"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/seleccionTemp"
+        app:layout_constraintRight_toLeftOf="@+id/tempActual"
+        android:layout_marginRight="0dp"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/tempActual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temperature"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/seleccionTemp"
+        android:layout_marginRight="0dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/valorSeekBar" />
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/alternarBoton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="alternar"
-        android:layout_marginTop="7dp"
-        app:layout_constraintTop_toBottomOf="@id/nombreTextView"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:text="Actualizar"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0.501"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/tempSeleccionada" />
 
     <SeekBar
         android:id="@+id/seleccionTemp"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:max="20"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:max="40"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/alternarBoton" />
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/enabledState" />
 
 </android.support.constraint.ConstraintLayout>

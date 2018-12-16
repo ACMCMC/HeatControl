@@ -23,14 +23,24 @@ import java.util.List;
 public class DeviceListActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter recyclerAdapter;
+    private DeviceListAdapter recyclerAdapter;
     private RecyclerView.LayoutManager recyclerLayoutManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.device_list_activity);
-        App mApp = (App) getApplicationContext();
+        final App mApp = (App) getApplicationContext();
+
+        Button botonUpdate = (Button) findViewById(R.id.list_botonUpdate);
+
+        botonUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mApp.setDeviceArrayList(BroadlinkAPI.getInstance().updateDevices());
+                recyclerAdapter.setDevices(mApp.getDeviceArrayList());
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list_RecyclerView);
 
@@ -49,6 +59,11 @@ class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceHol
     DeviceListAdapter(List<Device> devices, Context contexto) {
         this.devices = devices;
         this.contexto = contexto;
+    }
+
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+        notifyDataSetChanged();
     }
 
     @Override

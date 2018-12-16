@@ -11,6 +11,7 @@ import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,6 +46,8 @@ public class BroadlinkAPI {
         }
         return instance;
     }
+
+
 
     public String executeCommand(int api_id, String command) {
         String out;
@@ -181,9 +184,59 @@ public class BroadlinkAPI {
 
         return deviceArray;
     }
+}
 
+class BroadlinkMessageData {
+    List<Byte> messageArray;
 
-    public static int Modbus_CRC16(byte[] data, int len) {
+    BroadlinkMessageData() {
+        messageArray = new ArrayList<Byte>();
+    }
+
+    BroadlinkMessageData(byte[] data) {
+        messageArray = new ArrayList<Byte>();
+        for (int i = 0; i < data.length; i++) {
+            messageArray.add(new Byte(data[i]));
+        }
+    }
+
+    public void addMessageByte(byte messageByte) {
+        messageArray.add(messageByte);
+    }
+
+    public byte[] getMessagePrimitive() {
+        byte[] messagePrimitive = new byte[messageArray.size()];
+        for(int i = 0; i < messageArray.size(); i++) {
+            messagePrimitive[i] = messageArray.get(i);
+        }
+        return messagePrimitive;
+    }
+
+    public String getMessageAsHexString() {
+        String fullMsg = new String();
+        List<Byte> CRCMessage = getCRCMessage(messageArray);
+        for (Byte currentByte : CRCMessage) {
+            String currentStringByte = Integer.toHexString(currentByte.byteValue() & 255);
+            if (currentStringByte.length() == 1) {
+                fullMsg = new StringBuilder(fullMsg).append("0").toString();
+            }
+            fullMsg = new StringBuilder(fullMsg).append(currentStringByte).toString();
+        }
+
+        return fullMsg;
+
+    }
+
+    private List<Byte> getCRCMessage(List<Byte> message) {
+        List<Byte> CRC = new ArrayList<Byte>();
+        CRC.addAll(message);
+        Byte[] messagePrimitive = new Byte[message.size()];
+        CRC.add(Byte.valueOf((byte) (Modbus_CRC16(message.toArray(messagePrimitive),message.size()) & 255)));
+        CRC.add(Byte.valueOf((byte) ((Modbus_CRC16(message.toArray(messagePrimitive),message.size()) >> 8) & 255)));
+        return CRC;
+    }
+
+    private int Modbus_CRC16(Byte[] data, int len) {
 
         char[] Low_order_byte_table = {0x00, 0xC0, 0xC1, 0x01, 0xC3, 0x03, 0x02, 0xC2, 0xC6, 0x06, 0x07, 0xC7, 0x05, 0xC5, 0xC4,
                 0x04, 0xCC, 0x0C, 0x0D, 0xCD, 0x0F, 0xCF, 0xCE, 0x0E, 0x0A, 0xCA, 0xCB, 0x0B, 0xC9, 0x09,
@@ -230,7 +283,7 @@ public class BroadlinkAPI {
         int i = 0;
         while (len > 0) {
             len--;
-            codigoLookup = (CRCLo ^ (data[i] & 255));
+            codigoLookup = (CRCLo ^ (data[i].byteValue() & 255));
             CRCLo = (CRCHi ^ High_order_byte_table[codigoLookup]);
             CRCHi = (Low_order_byte_table[codigoLookup]);
 

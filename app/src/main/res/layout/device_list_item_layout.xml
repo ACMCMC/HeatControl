@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/layoutDeviceListItem">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/nombreDeviceListItem"/>
+    android:id="@+id/layoutDeviceListItem"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/standardMargin">
+
+    <TextView
+        android:id="@+id/nombreDeviceListItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/buttonDeviceListItem"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:text="Nombre" />
+
     <Button
+        android:id="@+id/buttonDeviceListItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:text="Administrar"
-        android:id="@+id/buttonDeviceListItem"/>
+        android:layout_centerVertical="true"
+        android:text="@string/manage" />
 </RelativeLayout>

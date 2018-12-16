@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Heat Control</string>
+    <string name="app_name" translatable="false">Heat Control</string>
+    <string name="devices">Devices</string>
+    <string name="manage">Manage</string>
+    <string name="update">Update</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
 </resources>
