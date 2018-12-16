@@ -57,6 +57,7 @@ public class BroadlinkConstants {
     public static final String CMD_RM2_STUDY = "rm2_study";
     public static final String CMD_RM2_CODE = "rm2_code";
     public static final String CMD_RM2_SEND = "rm2_send";
+    public static final String CMD_WIFI_INFO = "wifi_info";
     public static final String CMD_EASY_CONFIG = "easyconfig";
 
     //Broadlink command api_id
@@ -79,5 +80,6 @@ public class BroadlinkConstants {
     public static final int CMD_RM2_STUDY_ID = 132;
     public static final int CMD_RM2_CODE_ID = 133;
     public static final int CMD_RM2_SEND_ID = 134;
+    public static final int CMD_WIFI_INFO_ID = 9000;
     public static final int CMD_EASY_CONFIG_ID = 10000;
 }

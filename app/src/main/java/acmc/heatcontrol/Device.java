@@ -1,5 +1,8 @@
 package acmc.heatcontrol;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 /**
  * Created by acmc on 11/12/2018.
  */
@@ -14,6 +17,7 @@ public class Device {
     private int id;
     private int subdevice;
     private String key;
+    private int temp;
 
 public Device(){}
 
@@ -66,4 +70,75 @@ public Device(){}
     String getName() {
         return name;
     }
+
+
+    public String getState() {
+        String state;
+        String out = BroadlinkAPI.getInstance().executeCommand(BroadlinkConstants.CMD_DEVICE_STATE_ID,BroadlinkConstants.CMD_DEVICE_STATE,mac);
+        JsonObject outJson = new JsonParser().parse(out).getAsJsonObject();
+        state = outJson.get("status").getAsString();
+        return state;
+    }
+
+    private boolean getPowerState() {
+        BroadlinkAPI api = BroadlinkAPI.getInstance();
+        JsonObject request = new JsonObject();
+        request.addProperty(BroadlinkConstants.PARAM_MAC,mac);
+        request.addProperty("ipaddr","192.168.1.1");
+        String out = api.executeCommand(request,BroadlinkConstants.CMD_WIFI_INFO_ID,BroadlinkConstants.CMD_WIFI_INFO);
+        System.out.println(out);
+
+        JsonObject outJson = new JsonParser().parse(out).getAsJsonObject();
+        if (outJson.get("code").getAsInt() == -3) {
+            return true;
+        }
+        return false;
+    }
+
+    public int setTemp(int temp) {
+
+        //la temperatura la multiplicamos por 2 para ajustarla, porque por cada +1 = +0.5 (y no +1).
+        temp = temp * 2;
+        this.temp = temp;
+
+        JsonObject request = new JsonObject();
+        request.addProperty(BroadlinkConstants.PARAM_MAC,mac);
+        request.addProperty("format","string");
+
+        String data = new String();
+
+        byte[] test = new byte[8];
+        /*test[0] = (byte) 1;
+        test[1] = (byte) 3;
+        test[2] = (byte) 0;
+        test[3] = (byte) 1;
+        test[4] = (byte) 0;
+        test[5] = (byte) temp;
+        test[6] = (byte) (BroadlinkAPI.Modbus_CRC16(test, 6) & 255);
+        test[7] = (byte) ((BroadlinkAPI.Modbus_CRC16(test, 6) >> 8) & 255);*/
+
+        test[0] = (byte) 1;
+        test[1] = (byte) 6;
+        test[2] = (byte) 0;
+        test[3] = (byte) 1;
+        test[4] = (byte) 0;
+        test[5] = (byte) temp;
+        test[6] = (byte) (BroadlinkAPI.Modbus_CRC16(test, 6) & 255);
+        test[7] = (byte) ((BroadlinkAPI.Modbus_CRC16(test, 6) >> 8) & 255);
+
+        for (int i = 0; i < 8; i++) {
+            String temps = Integer.toHexString(test[i] & 255);
+            if (temps.length() == 1) {
+                data = new StringBuilder(String.valueOf(data)).append("0").toString();
+            }
+            data = new StringBuilder(String.valueOf(data)).append(temps).toString();
+        }
+
+        request.addProperty("data",data);
+
+        String out = BroadlinkAPI.getInstance().executeCommand(request,BroadlinkConstants.CMD_WIFI_INFO_ID,"passthrough");
+        return temp;
+    }
+
+
 }
